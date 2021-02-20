@@ -1,0 +1,1 @@
+NAVIGATION_BUTTONS = "[data-test-id=\"HEADER_LIST_ITEM\"]"
