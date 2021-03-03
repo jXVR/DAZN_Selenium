@@ -44,7 +44,7 @@ def test_max_future_date_is_displayed(browser):
     schedule_page = SchedulePageObject(browser)
     max_forward_date = (datetime.datetime.now() + datetime.timedelta(14))
 
-    while not schedule_page.date_tiles()[-1].is_displayed():
+    while not schedule_page.date_tiles()[-1].is_displayed() or schedule_page.date_forward_arrow().is_displayed():
         schedule_page.date_forward_arrow().click()
         sleep(2)
 
@@ -64,7 +64,7 @@ def test_max_past_date_is_displayed(browser):
     schedule_page = SchedulePageObject(browser)
     max_past_date = (datetime.datetime.now() - datetime.timedelta(30))
 
-    while not schedule_page.date_tiles()[0].is_displayed():
+    while not schedule_page.date_tiles()[0].is_displayed() or schedule_page.date_back_arrow().is_displayed():
         schedule_page.date_back_arrow().click()
         sleep(1)
 
@@ -129,5 +129,4 @@ def test_select_multiple_sport_and_dismiss_dropdown(browser):
     assert schedule_page.sport_filter_counter().get_attribute("innerText") == "2"
     # assert ...
 
-# back arrow doesn't disappear after scrolling to the end - window resolution dependent
 # how to check if "all sports" is selected (counter or filter is not displayed)

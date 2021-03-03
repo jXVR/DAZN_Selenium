@@ -15,6 +15,15 @@ class CatalogPageObject(object):
     def schedule_button(self):
         return self.driver.find_elements(By.CSS_SELECTOR, navigation_locators.NAVIGATION_BUTTONS)[1]
 
+    def sports_dropdown(self):
+        return self.driver.find_elements(By.CSS_SELECTOR, navigation_locators.NAVIGATION_BUTTONS)[2]
+
+    def wait_for_the_sports_dropdown(self):
+        Lib.wait_for_element(self, navigation_locators.SPORTS_MENU_DROPDOWN_CONTAINER, By.CSS_SELECTOR)
+
+    def sports_dropdown_items(self):
+        return self.driver.find_elements(By.CSS_SELECTOR, navigation_locators.SPORTS_MENU_ITEM)
+
     def rails(self):
         return self.driver.find_elements(By.CSS_SELECTOR, locators.RAILS)
 
