@@ -35,3 +35,27 @@ class CatalogPageObject(object):
 
     def onboarding_banner_button(self):
         return self.driver.find_element(By.CSS_SELECTOR, locators.ONBOARDING_BANNER_BUTTON)
+
+    def rail_next_arrow(self):
+        return self.driver.find_element(By.CSS_SELECTOR, locators.RAIL_NEXT_ARROW)
+
+    def rail_previous_arrow(self):
+        return self.driver.find_element(By.CSS_SELECTOR, locators.RAIL_PREVIOUS_ARROW)
+
+    def wait_for_favourite_button(self):
+        Lib.wait_for_element(self, locators.FAVOURITE_BUTTON, By.CSS_SELECTOR)
+
+    def favourite_button(self):
+        return self.driver.find_element(By.CSS_SELECTOR, locators.FAVOURITE_BUTTON)
+
+    def favourite_list(self):
+        return self.driver.find_element(By.CSS_SELECTOR, locators.FAVOURITE_LIST)
+
+    def favourite_item(self):
+        return self.driver.find_elements(By.CSS_SELECTOR, locators.FAVOURITE_LIST_ELEMENT)
+
+    def favourite_confirmation_banner(self):
+        return self.driver.find_element(By.CSS_SELECTOR, locators.FAVOURITE_CONFIRMATION)
+
+    def favourite_confirmation_banner_dismiss_button(self):
+        return self.driver.find_element(By.CSS_SELECTOR, locators.FAVOURITE_DISMISS_BUTTON)

@@ -14,21 +14,19 @@ def browser():
     yield driver
     driver.quit()
 
-# @pytest.fixture(scope="session", autouse=True)
-# def sports_page(browser):
-#     sports_page = SportsPageObject(browser)
-#     return sports_page
-#
-# @pytest.fixture(scope="session", autouse=True)
-# def catalog_page(browser):
-#     catalog_page = CatalogPageObject(browser)
-#     return catalog_page
-
-
-def test_go_to_sports_page(browser):
-    log_in(browser)
-    catalog_page = CatalogPageObject(browser)
+@pytest.fixture(scope="session", autouse=True)
+def sports_page(browser):
     sports_page = SportsPageObject(browser)
+    return sports_page
+
+@pytest.fixture(scope="session", autouse=True)
+def catalog_page(browser):
+    catalog_page = CatalogPageObject(browser)
+    return catalog_page
+
+
+def test_go_to_sports_page(browser, sports_page, catalog_page):
+    log_in(browser)
 
     catalog_page.sports_dropdown().click()
     catalog_page.wait_for_the_sports_dropdown()
@@ -45,3 +43,6 @@ def test_first_rail_name(browser):
 def test_first_competition_name(browser):
     sports_page = SportsPageObject(browser)
     assert sports_page.competitions_tiles()[0].get_attribute("innerText") == "Copa Del Rey"
+
+def test_scroll_rail(browser):
+    pass
