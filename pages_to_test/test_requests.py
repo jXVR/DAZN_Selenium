@@ -1,8 +1,10 @@
 import pytest
+import requests
 import Selenium.DAZN.assets.urls as urls
 from Selenium.DAZN.objects.catalog_page_objects import CatalogPageObject
 from Selenium.DAZN.pages_to_test.test_sign_in_page import log_in
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.action_chains import ActionChains
 from seleniumwire.webdriver import Chrome
 from time import sleep
 
@@ -23,6 +25,9 @@ def catalog_page(browser):
 def test_subscribe_favourites(browser, catalog_page):
     log_in(browser)
     catalog_page.wait_for_the_page_to_be_open()
+    ActionChains(browser).move_to_element(catalog_page.rails()[2]).perform()
+    print(len(catalog_page.tiles()))
+    catalog_page.tiles()[2].click()
     catalog_page.wait_for_favourite_button()
     catalog_page.favourite_button().click()
 
@@ -68,3 +73,13 @@ def test_unsubscribe_unsubscribe_favourites(browser, catalog_page):
 
     catalog_page.favourite_confirmation_banner_dismiss_button().click()
     sleep(2)
+
+def test_tiles_video_responses(catalog_page):
+    tile_videos_links = catalog_page.page_links()
+    print("\n")
+    for element in tile_videos_links:
+        url = element.get_attribute('href')
+        if "https://" in url:
+            status_code = requests.get(url).status_code
+            if status_code != 200:
+                print(status_code, url)

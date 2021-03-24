@@ -27,6 +27,9 @@ class CatalogPageObject(object):
     def rails(self):
         return self.driver.find_elements(By.CSS_SELECTOR, locators.RAILS)
 
+    def tiles(self):
+        return self.driver.find_elements(By.CSS_SELECTOR, locators.TILES)
+
     def player_container(self):
         return self.driver.find_element(By.CSS_SELECTOR, locators.PLAYER_CONTAINER)
 
@@ -59,3 +62,6 @@ class CatalogPageObject(object):
 
     def favourite_confirmation_banner_dismiss_button(self):
         return self.driver.find_element(By.CSS_SELECTOR, locators.FAVOURITE_DISMISS_BUTTON)
+
+    def page_links(self):
+        return self.driver.find_elements(By.TAG_NAME, 'a')

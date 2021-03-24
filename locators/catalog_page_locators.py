@@ -1,6 +1,7 @@
 ONBOARDING_BANNER = "[data-test-id=\"ONBOARDING_LABEL\"]"
 ONBOARDING_BANNER_BUTTON = "[data-test-id=\"GOT_IT_BUTTON\"]"
 RAILS = 'section.rail__rail___1pYRO'
+TILES = "[data-test-id=\"TILE_TITLE\"]"
 PLAYER_CONTAINER = ".main__player-container-with-stats-enabled--1DS8m"
 RAIL_NEXT_ARROW = ".slick-arrow.slick-next"
 RAIL_PREVIOUS_ARROW = ".slick-arrow.slick-prev"
