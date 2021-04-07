@@ -1,7 +1,10 @@
 from Selenium.DAZN.locators import catalog_page_locators as locators
 from Selenium.DAZN.locators import navigation_panel_locators as navigation_locators
 from Selenium.DAZN.assets.lib import Lib
+import Selenium.DAZN.assets.urls as urls
 from selenium.webdriver.common.by import By
+import requests
+
 
 
 class CatalogPageObject(object):
@@ -27,8 +30,17 @@ class CatalogPageObject(object):
     def rails(self):
         return self.driver.find_elements(By.CSS_SELECTOR, locators.RAILS)
 
+    def rails_names(self):
+        return self.driver.find_elements(By.TAG_NAME, 'h2')
+
     def tiles(self):
         return self.driver.find_elements(By.CSS_SELECTOR, locators.TILES)
+
+    def tiles_within_rail(self, rail):
+        return rail.find_elements(By.CSS_SELECTOR, locators.TILES)
+
+    def href_from_tile(self, tile):
+        return tile.find_element(By.TAG_NAME, 'a')
 
     def player_container(self):
         return self.driver.find_element(By.CSS_SELECTOR, locators.PLAYER_CONTAINER)
@@ -39,11 +51,11 @@ class CatalogPageObject(object):
     def onboarding_banner_button(self):
         return self.driver.find_element(By.CSS_SELECTOR, locators.ONBOARDING_BANNER_BUTTON)
 
-    def rail_next_arrow(self):
-        return self.driver.find_element(By.CSS_SELECTOR, locators.RAIL_NEXT_ARROW)
+    def rail_next_arrow(self, rail_counter):
+        return self.driver.find_elements(By.CSS_SELECTOR, locators.RAIL_NEXT_ARROW)[rail_counter]
 
-    def rail_previous_arrow(self):
-        return self.driver.find_element(By.CSS_SELECTOR, locators.RAIL_PREVIOUS_ARROW)
+    def rail_previous_arrow(self, rail_counter):
+        return self.driver.find_elements(By.CSS_SELECTOR, locators.RAIL_PREVIOUS_ARROW)[rail_counter]
 
     def wait_for_favourite_button(self):
         Lib.wait_for_element(self, locators.FAVOURITE_BUTTON, By.CSS_SELECTOR)
@@ -65,3 +77,15 @@ class CatalogPageObject(object):
 
     def page_links(self):
         return self.driver.find_elements(By.TAG_NAME, 'a')
+
+    def find_event_with_fav_in_rail(self, rail):
+        language_code = 'en'
+        country_code = 'DE'
+        for counter, tile in enumerate(self.tiles_within_rail(rail)):
+            eventId = self.href_from_tile(tile).get_attribute('href').split("/")[-1]
+            # print(eventId)
+            request = requests.get(
+                f'https://{urls.FAVOURITES_HOST}/v2/events/{eventId}/favourites?languageCode={language_code}&countryCode={country_code}')
+            # print(counter, request.status_code, eventId)
+            if request.status_code == 200:
+                return counter, eventId
