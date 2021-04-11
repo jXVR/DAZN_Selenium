@@ -24,16 +24,12 @@ def test_subscribe_favourites(browser, catalog_page):
     log_in(browser)
     catalog_page.wait_for_the_page_to_be_open()
 
-    for rail_counter, rail in enumerate(catalog_page.rails()):
-        tile_with_fav = catalog_page.find_event_with_fav_in_rail(rail)
-        if tile_with_fav:
-            break
+    rail_counter, tile_counter = catalog_page.find_tile_location_with_fav()
 
     rail = catalog_page.rails()[rail_counter]
-    tile = catalog_page.tiles_within_rail(rail)[tile_with_fav[0]]
+    tile = catalog_page.tiles_within_rail(rail)[tile_counter]
 
     ActionChains(browser).move_to_element(rail).perform()
-
     while not tile.is_displayed():
         catalog_page.rail_next_arrow(rail_counter).click()
         sleep(1)

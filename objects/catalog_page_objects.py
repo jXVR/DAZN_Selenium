@@ -75,17 +75,47 @@ class CatalogPageObject(object):
     def favourite_confirmation_banner_dismiss_button(self):
         return self.driver.find_element(By.CSS_SELECTOR, locators.FAVOURITE_DISMISS_BUTTON)
 
+    def wait_for_video_type_button(self):
+        Lib.wait_for_element(self, locators.VIDEO_TYPE_LIST_ELEMENT , By.CSS_SELECTOR)
+
+    def video_type_button(self):
+        return self.driver.find_element(By.CSS_SELECTOR, locators.VIDEO_TYPE_BUTTON)
+
+    def video_type_item(self):
+        return self.driver.find_elements(By.CSS_SELECTOR, locators.VIDEO_TYPE_LIST_ELEMENT)
+
     def page_links(self):
         return self.driver.find_elements(By.TAG_NAME, 'a')
 
-    def find_event_with_fav_in_rail(self, rail):
+    def find_tile_location_with_fav(self):
+        for rail_counter, rail in enumerate(self.rails()):
+            tile_counter = self.find_tile_counter_with_fav(rail)
+            if tile_counter >= 0:
+                return rail_counter, tile_counter
+
+    def find_tile_counter_with_fav(self, rail):
         language_code = 'en'
         country_code = 'DE'
         for counter, tile in enumerate(self.tiles_within_rail(rail)):
             eventId = self.href_from_tile(tile).get_attribute('href').split("/")[-1]
-            # print(eventId)
             request = requests.get(
                 f'https://{urls.FAVOURITES_HOST}/v2/events/{eventId}/favourites?languageCode={language_code}&countryCode={country_code}')
-            # print(counter, request.status_code, eventId)
             if request.status_code == 200:
-                return counter, eventId
+                return counter
+
+    def find_tile_location_with_multiple_vod_types(self):
+        rails_url = f'https://{urls.RAILS_HOST}/eu/v7/rails?country=de&groupId=home'
+        rails_request = requests.get(rails_url)
+
+        for rail_counter, rail_name in enumerate(rails_request.json()["Rails"]):
+            rail_id = rail_name["Id"]
+            rail_url = f'https://{urls.RAIL_HOST}/eu/v3/Rail?id={rail_id}&country=de'
+            rail_request = requests.get(rail_url)
+            tiles_counter = self.find_tile_counter_with_multiple_vod_types(rail_request.json()["Tiles"])
+            if tiles_counter > 0:
+                return rail_counter, tiles_counter
+
+    def find_tile_counter_with_multiple_vod_types(self, tiles):
+        for counter, tile in enumerate(tiles):
+            if len(tile["Related"]) > 0:
+                return counter

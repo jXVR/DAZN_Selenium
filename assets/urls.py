@@ -1,3 +1,5 @@
 MAIN_URL = "https://stag.dazn.com"
 SIGN_IN_URL = "https://stag.dazn.com/en-DE/account/signin"
 FAVOURITES_HOST = "favourites.discovery.dazn-stage.com"
+RAIL_HOST = "rail.discovery.dazn-stage.com"
+RAILS_HOST = "rails.discovery.dazn-stage.com"
