@@ -48,13 +48,13 @@ def test_subscribe_favourites(browser, catalog_page):
             favourites_status_code = request.response.status_code
 
     assert favourites_status_code == 201
-    assert catalog_page.favourite_confirmation_banner().is_displayed()
-    assert catalog_page.favourite_confirmation_banner_dismiss_button().is_displayed()
+    assert catalog_page.toast_container_confirmation_banner().is_displayed()
+    assert catalog_page.toast_container_dismiss_button().is_displayed()
 
-    catalog_page.favourite_confirmation_banner_dismiss_button().click()
+    catalog_page.toast_container_dismiss_button().click()
     sleep(1)
 
-def test_unsubscribe_unsubscribe_favourites(browser, catalog_page):
+def test_unsubscribe_favourites(browser, catalog_page):
     catalog_page.favourite_button().click()
 
     assert catalog_page.favourite_list().is_displayed()
@@ -67,10 +67,10 @@ def test_unsubscribe_unsubscribe_favourites(browser, catalog_page):
             favourites_status_code = request.response.status_code
 
     assert favourites_status_code == 204
-    assert catalog_page.favourite_confirmation_banner().is_displayed()
-    assert catalog_page.favourite_confirmation_banner_dismiss_button().is_displayed()
+    assert catalog_page.toast_container_confirmation_banner().is_displayed()
+    assert catalog_page.toast_container_dismiss_button().is_displayed()
 
-    catalog_page.favourite_confirmation_banner_dismiss_button().click()
+    catalog_page.toast_container_dismiss_button().click()
     sleep(2)
 
 # def test_tiles_video_responses(catalog_page):

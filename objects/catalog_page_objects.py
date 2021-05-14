@@ -14,6 +14,7 @@ class CatalogPageObject(object):
 
     def wait_for_the_page_to_be_open(self):
         Lib.wait_for_element(self, locators.PLAYER_CONTAINER, By.CSS_SELECTOR)
+        # change for next object
 
     def schedule_button(self):
         return self.driver.find_elements(By.CSS_SELECTOR, navigation_locators.NAVIGATION_BUTTONS)[1]
@@ -69,11 +70,23 @@ class CatalogPageObject(object):
     def favourite_item(self):
         return self.driver.find_elements(By.CSS_SELECTOR, locators.FAVOURITE_LIST_ELEMENT)
 
-    def favourite_confirmation_banner(self):
-        return self.driver.find_element(By.CSS_SELECTOR, locators.FAVOURITE_CONFIRMATION)
+    def wait_for_reminder_button(self):
+        Lib.wait_for_element(self, locators.REMINDER_BUTTON_IN_PB_CONTAINER, By.CSS_SELECTOR)
 
-    def favourite_confirmation_banner_dismiss_button(self):
-        return self.driver.find_element(By.CSS_SELECTOR, locators.FAVOURITE_DISMISS_BUTTON)
+    def reminder_button_in_pb_container(self):
+        return self.driver.find_element(By.CSS_SELECTOR, locators.REMINDER_BUTTON_IN_PB_CONTAINER)
+
+    def reminder_clock_inactive(self):
+        return self.driver.find_element(By.CSS_SELECTOR, locators.REMINDER_IN_RAIL_INACTIVE)
+
+    def reminder_clock_active(self):
+        return self.driver.find_element(By.CSS_SELECTOR, locators.REMINDER_IN_RAIL_ACTIVE)
+
+    def toast_container_confirmation_banner(self):
+        return self.driver.find_element(By.CSS_SELECTOR, locators.TOAST_CONTAINER_CONFIRMATION)
+
+    def toast_container_dismiss_button(self):
+        return self.driver.find_element(By.CSS_SELECTOR, locators.TOAST_CONTAINER_DISMISS_BUTTON)
 
     def wait_for_video_type_button(self):
         Lib.wait_for_element(self, locators.VIDEO_TYPE_LIST_ELEMENT , By.CSS_SELECTOR)
@@ -86,6 +99,12 @@ class CatalogPageObject(object):
 
     def page_links(self):
         return self.driver.find_elements(By.TAG_NAME, 'a')
+
+    def dialog_modal(self):
+        return self.driver.find_element(By.CSS_SELECTOR, locators.DIALOG_MODAL)
+
+    def ok_button(self):
+        return self.driver.find_element(By.CSS_SELECTOR, locators.OK_BUTTON)
 
     def find_tile_location_with_fav(self):
         for rail_counter, rail in enumerate(self.rails()):
@@ -112,10 +131,27 @@ class CatalogPageObject(object):
             rail_url = f'https://{urls.RAIL_HOST}/eu/v3/Rail?id={rail_id}&country=de'
             rail_request = requests.get(rail_url)
             tiles_counter = self.find_tile_counter_with_multiple_vod_types(rail_request.json()["Tiles"])
-            if tiles_counter > 0:
+            if tiles_counter > 0: # check if 'is not None' is working
                 return rail_counter, tiles_counter
 
     def find_tile_counter_with_multiple_vod_types(self, tiles):
         for counter, tile in enumerate(tiles):
             if len(tile["Related"]) > 0:
                 return counter
+
+    def find_tile_counter_with_reminders(self, tiles): # add wrapper
+        for counter, tile in enumerate(tiles):
+            if tile["Type"] == "UpComing":
+                return counter
+
+    def find_tile_location_with_reminders(self):
+        rails_url = f'https://{urls.RAILS_HOST}/eu/v7/rails?country=de&groupId=home'
+        rails_request = requests.get(rails_url)
+
+        for rail_counter, rail_name in enumerate(rails_request.json()["Rails"]):
+            rail_id = rail_name["Id"]
+            rail_url = f'https://{urls.RAIL_HOST}/eu/v3/Rail?id={rail_id}&country=de'
+            rail_request = requests.get(rail_url)
+            tiles_counter = self.find_tile_counter_with_reminders(rail_request.json()["Tiles"])
+            if tiles_counter is not None:
+                return rail_counter, tiles_counter
