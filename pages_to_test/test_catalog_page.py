@@ -1,11 +1,12 @@
 import pytest
-import Selenium.DAZN.assets.urls as urls
-from Selenium.DAZN.objects.catalog_page_objects import CatalogPageObject
-from Selenium.DAZN.objects.playback_container_objects import PlaybackContainerObject
-from Selenium.DAZN.pages_to_test.test_sign_in_page import log_in
+import assets.urls as urls
+from objects.catalog_page_objects import CatalogPageObject
+from objects.playback_container_objects import PlaybackContainerObject
+from pages_to_test.test_sign_in_page import log_in
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.action_chains import ActionChains
 from time import sleep
+
 
 @pytest.fixture(scope="session", autouse=True)
 def browser():
@@ -15,18 +16,21 @@ def browser():
     yield driver
     driver.quit()
 
+
 @pytest.fixture(scope="session", autouse=True)
 def catalog_page(browser):
     catalog_page = CatalogPageObject(browser)
     return catalog_page
+
 
 @pytest.fixture(scope="session", autouse=True)
 def playback_container(browser):
     playback_container = PlaybackContainerObject(browser)
     return playback_container
 
+
 def test_rail_arrow(browser, catalog_page):
-    log_in(browser)
+    log_in(browser, account_index=1)
     scroll_to_second_rail = ActionChains(browser).move_to_element(catalog_page.rails()[3])
     scroll_to_second_rail.perform()
     move_cursor_to_first_rail = ActionChains(browser).move_to_element(catalog_page.rails()[0])

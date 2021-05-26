@@ -1,0 +1,10 @@
+USER_CREDENTIALS = [
+    {
+        'EMAIL': '',
+        'PASSWORD': ''
+    },
+    {
+        'EMAIL': '',
+        'PASSWORD': ''
+    },
+]

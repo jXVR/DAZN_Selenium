@@ -1,9 +1,9 @@
 import pytest
-import Selenium.DAZN.assets.urls as urls
-from Selenium.DAZN.objects.sports_page_objects import SportsPageObject
-from Selenium.DAZN.objects.catalog_page_objects import CatalogPageObject
-from Selenium.DAZN.objects.competition_page_objects import CompetitionPageObject
-from Selenium.DAZN.pages_to_test.test_sign_in_page import log_in
+import assets.urls as urls
+from objects.sports_page_objects import SportsPageObject
+from objects.catalog_page_objects import CatalogPageObject
+from objects.competition_page_objects import CompetitionPageObject
+from pages_to_test.test_sign_in_page import log_in
 from selenium.webdriver import Chrome
 
 
@@ -15,8 +15,9 @@ def browser():
     yield driver
     driver.quit()
 
+
 def test_go_to_competition_page(browser):
-    log_in(browser)
+    log_in(browser, account_index=1)
     catalog_page = CatalogPageObject(browser)
     sports_page = SportsPageObject(browser)
     competition_page = CompetitionPageObject(browser)
@@ -40,6 +41,7 @@ def test_go_to_competition_page(browser):
     assert competition_page.page_title().is_displayed()
     assert competition_page.page_title().get_attribute("innerText") == "BUNDESLIGA"
 
+
 def test_sportsdata_menu(browser):
     competition_page = CompetitionPageObject(browser)
 
@@ -47,10 +49,3 @@ def test_sportsdata_menu(browser):
     assert competition_page.watch_button().is_displayed()
     assert competition_page.standings_button().is_displayed()
     assert competition_page.matches_button().is_displayed()
-
-def test_follow_button(browser):
-    competition_page = CompetitionPageObject(browser)
-
-    assert competition_page.follow_button().is_displayed()
-    # test popup message
-    # test if the call was sent

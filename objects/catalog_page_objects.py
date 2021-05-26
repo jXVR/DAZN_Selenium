@@ -1,10 +1,10 @@
-from Selenium.DAZN.locators import catalog_page_locators as locators
-from Selenium.DAZN.locators import navigation_panel_locators as navigation_locators
-from Selenium.DAZN.assets.lib import Lib
-import Selenium.DAZN.assets.urls as urls
+from locators import catalog_page_locators as locators
+from locators import navigation_panel_locators as navigation_locators
+from locators import playback_container_locators as playback_locators
+from assets.lib import Lib
+import assets.urls as urls
 from selenium.webdriver.common.by import By
 import requests
-
 
 
 class CatalogPageObject(object):
@@ -12,9 +12,29 @@ class CatalogPageObject(object):
     def __init__(self, driver, *args, **kwargs):
         self.driver = driver
 
-    def wait_for_the_page_to_be_open(self):
-        Lib.wait_for_element(self, locators.PLAYER_CONTAINER, By.CSS_SELECTOR)
-        # change for next object
+    def wait_for_the_page_to_be_open_with_auto_playback(self):
+            Lib.wait_for_element(self, playback_locators.VISIBLE_PAUSE_BUTTON, By.CSS_SELECTOR)
+
+    def wait_for_the_page_to_be_open_without_auto_playback(self):
+            Lib.wait_for_element(self, locators.TILE_BACKGROUND_IMAGE, By.CSS_SELECTOR)
+
+    def wait_for_slick_arrows_to_be_displayed(self):
+        Lib.wait_for_element(self, locators.RAIL_NEXT_ARROW, By.CSS_SELECTOR)
+
+    def wait_for_toast_container(self):
+        Lib.wait_for_element(self, locators.TOAST_CONTAINER_CONFIRMATION, By.CSS_SELECTOR)
+
+    def wait_for_video_type_button(self):
+        Lib.wait_for_element(self, locators.VIDEO_TYPE_LIST_ELEMENT, By.CSS_SELECTOR)
+
+    def wait_for_favourite_button(self):
+        Lib.wait_for_element(self, locators.FAVOURITE_BUTTON, By.CSS_SELECTOR)
+
+    def wait_for_favourite_list(self):
+        Lib.wait_for_element(self, locators.FAVOURITE_LIST, By.CSS_SELECTOR)
+
+    def wait_for_reminder_button(self):
+        Lib.wait_for_element(self, locators.REMINDER_BUTTON, By.CSS_SELECTOR)
 
     def schedule_button(self):
         return self.driver.find_elements(By.CSS_SELECTOR, navigation_locators.NAVIGATION_BUTTONS)[1]
@@ -28,6 +48,12 @@ class CatalogPageObject(object):
     def sports_dropdown_items(self):
         return self.driver.find_elements(By.CSS_SELECTOR, navigation_locators.SPORTS_MENU_ITEM)
 
+    def find_rail_container_by_name(self, text):
+        return self.driver.find_element(By.XPATH, f'//h2[text()="{text}"]').find_element(By.XPATH, "..")
+
+    def find_tile_container_by_name(self, text):
+        return self.driver.find_element(By.XPATH, f'//*[text()="{text}"]').find_element(By.XPATH, "../..")
+
     def rails(self):
         return self.driver.find_elements(By.CSS_SELECTOR, locators.RAILS)
 
@@ -38,10 +64,7 @@ class CatalogPageObject(object):
         return self.driver.find_elements(By.CSS_SELECTOR, locators.TILES)
 
     def tiles_within_rail(self, rail):
-        return rail.find_elements(By.CSS_SELECTOR, locators.TILES)
-
-    def href_from_tile(self, tile):
-        return tile.find_element(By.TAG_NAME, 'a')
+        return rail.find_elements(By.CSS_SELECTOR, locators.TILE_BACKGROUND_IMAGE)
 
     def player_container(self):
         return self.driver.find_element(By.CSS_SELECTOR, locators.PLAYER_CONTAINER)
@@ -55,11 +78,14 @@ class CatalogPageObject(object):
     def rail_next_arrow(self, rail_counter):
         return self.driver.find_elements(By.CSS_SELECTOR, locators.RAIL_NEXT_ARROW)[rail_counter]
 
+    def next_arrow_within_rail(self, rail):
+        return rail.find_element(By.CSS_SELECTOR, locators.RAIL_NEXT_ARROW)
+
+    def previous_arrow_within_rail(self, rail):
+        return rail.find_element(By.CSS_SELECTOR, locators.RAIL_PREVIOUS_ARROW)
+
     def rail_previous_arrow(self, rail_counter):
         return self.driver.find_elements(By.CSS_SELECTOR, locators.RAIL_PREVIOUS_ARROW)[rail_counter]
-
-    def wait_for_favourite_button(self):
-        Lib.wait_for_element(self, locators.FAVOURITE_BUTTON, By.CSS_SELECTOR)
 
     def favourite_button(self):
         return self.driver.find_element(By.CSS_SELECTOR, locators.FAVOURITE_BUTTON)
@@ -70,11 +96,11 @@ class CatalogPageObject(object):
     def favourite_item(self):
         return self.driver.find_elements(By.CSS_SELECTOR, locators.FAVOURITE_LIST_ELEMENT)
 
-    def wait_for_reminder_button(self):
-        Lib.wait_for_element(self, locators.REMINDER_BUTTON_IN_PB_CONTAINER, By.CSS_SELECTOR)
+    def reminder_button(self):
+        return self.driver.find_element(By.CSS_SELECTOR, locators.REMINDER_BUTTON)
 
-    def reminder_button_in_pb_container(self):
-        return self.driver.find_element(By.CSS_SELECTOR, locators.REMINDER_BUTTON_IN_PB_CONTAINER)
+    def reminder_button_within_tile(self, tile):
+        return tile.find_element(By.CSS_SELECTOR, locators.REMINDER_BUTTON)
 
     def reminder_clock_inactive(self):
         return self.driver.find_element(By.CSS_SELECTOR, locators.REMINDER_IN_RAIL_INACTIVE)
@@ -87,9 +113,6 @@ class CatalogPageObject(object):
 
     def toast_container_dismiss_button(self):
         return self.driver.find_element(By.CSS_SELECTOR, locators.TOAST_CONTAINER_DISMISS_BUTTON)
-
-    def wait_for_video_type_button(self):
-        Lib.wait_for_element(self, locators.VIDEO_TYPE_LIST_ELEMENT , By.CSS_SELECTOR)
 
     def video_type_button(self):
         return self.driver.find_element(By.CSS_SELECTOR, locators.VIDEO_TYPE_BUTTON)
@@ -106,52 +129,40 @@ class CatalogPageObject(object):
     def ok_button(self):
         return self.driver.find_element(By.CSS_SELECTOR, locators.OK_BUTTON)
 
-    def find_tile_location_with_fav(self):
-        for rail_counter, rail in enumerate(self.rails()):
-            tile_counter = self.find_tile_counter_with_fav(rail)
-            if tile_counter >= 0:
-                return rail_counter, tile_counter
-
-    def find_tile_counter_with_fav(self, rail):
-        language_code = 'en'
-        country_code = 'DE'
-        for counter, tile in enumerate(self.tiles_within_rail(rail)):
-            eventId = self.href_from_tile(tile).get_attribute('href').split("/")[-1]
-            request = requests.get(
-                f'https://{urls.FAVOURITES_HOST}/v2/events/{eventId}/favourites?languageCode={language_code}&countryCode={country_code}')
-            if request.status_code == 200:
-                return counter
-
-    def find_tile_location_with_multiple_vod_types(self):
+    def find_tile_location(self, func):
         rails_url = f'https://{urls.RAILS_HOST}/eu/v7/rails?country=de&groupId=home'
         rails_request = requests.get(rails_url)
 
-        for rail_counter, rail_name in enumerate(rails_request.json()["Rails"]):
-            rail_id = rail_name["Id"]
+        for rail_data in rails_request.json()["Rails"]:
+            rail_id = rail_data["Id"]
             rail_url = f'https://{urls.RAIL_HOST}/eu/v3/Rail?id={rail_id}&country=de'
             rail_request = requests.get(rail_url)
-            tiles_counter = self.find_tile_counter_with_multiple_vod_types(rail_request.json()["Tiles"])
-            if tiles_counter > 0: # check if 'is not None' is working
-                return rail_counter, tiles_counter
+            rail_name = rail_request.json()["Title"]
+            tile_name = func(rail_request.json()["Tiles"])
+            if tile_name is not None and "Don't miss" not in rail_name:
+                print(f"### Rail Id = {rail_id}, Rail name = {rail_name}")
+                return rail_name, tile_name
 
-    def find_tile_counter_with_multiple_vod_types(self, tiles):
-        for counter, tile in enumerate(tiles):
+    def find_tile_name_with_multiple_vod_types(self, tiles):
+        for tile in tiles:
             if len(tile["Related"]) > 0:
-                return counter
+                tile_name = tile["Title"]
+                print(f"### Tile title = {tile_name}")
+                return tile_name
 
-    def find_tile_counter_with_reminders(self, tiles): # add wrapper
-        for counter, tile in enumerate(tiles):
+    def find_tile_name_with_reminders(self, tiles):
+        for tile in tiles:
             if tile["Type"] == "UpComing":
-                return counter
+                tile_name = tile["Title"]
+                print(f"### Tile title = {tile_name}")
+                return tile_name
 
-    def find_tile_location_with_reminders(self):
-        rails_url = f'https://{urls.RAILS_HOST}/eu/v7/rails?country=de&groupId=home'
-        rails_request = requests.get(rails_url)
-
-        for rail_counter, rail_name in enumerate(rails_request.json()["Rails"]):
-            rail_id = rail_name["Id"]
-            rail_url = f'https://{urls.RAIL_HOST}/eu/v3/Rail?id={rail_id}&country=de'
-            rail_request = requests.get(rail_url)
-            tiles_counter = self.find_tile_counter_with_reminders(rail_request.json()["Tiles"])
-            if tiles_counter is not None:
-                return rail_counter, tiles_counter
+    def find_tile_name_with_fav(self, tiles):
+        for tile in tiles:
+            eventId = tile["EventId"]
+            request = requests.get(
+                f'https://{urls.FAVOURITES_ENDPOINT}/{eventId}/favourites?languageCode=en&countryCode=DE')
+            if request.status_code == 200:
+                tile_name = tile["Title"]
+                print(f"### Tile title = {tile_name}")
+                return tile_name

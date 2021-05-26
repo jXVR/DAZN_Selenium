@@ -1,5 +1,5 @@
-from Selenium.DAZN.locators import schedule_page_locators as locators
-from Selenium.DAZN.assets.lib import Lib
+from locators import schedule_page_locators as locators
+from assets.lib import Lib
 from selenium.webdriver.common.by import By
 
 

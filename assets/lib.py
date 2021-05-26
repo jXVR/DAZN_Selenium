@@ -8,4 +8,4 @@ class Lib:
 
 
     def wait_for_element(self, selector, by):
-        return WebDriverWait(self.driver, 25).until(EC.presence_of_element_located((by, selector)))
+        return WebDriverWait(self.driver, 45).until(EC.presence_of_element_located((by, selector)))

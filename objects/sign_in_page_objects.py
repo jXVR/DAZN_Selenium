@@ -1,6 +1,6 @@
-from Selenium.DAZN.locators import sign_in_page_locators as locators
-from Selenium.DAZN.assets.urls import SIGN_IN_URL
-from Selenium.DAZN.assets.lib import Lib
+from locators import sign_in_page_locators as locators
+from assets.urls import SIGN_IN_URL
+from assets.lib import Lib
 from selenium.webdriver.common.by import By
 
 

@@ -14,10 +14,12 @@ def browser():
     yield driver
     driver.quit()
 
+
 @pytest.fixture(scope="session", autouse=True)
 def sports_page(browser):
     sports_page = SportsPageObject(browser)
     return sports_page
+
 
 @pytest.fixture(scope="session", autouse=True)
 def catalog_page(browser):
@@ -36,13 +38,12 @@ def test_go_to_sports_page(browser, sports_page, catalog_page):
     assert sports_page.page_title().is_displayed()
     assert sports_page.page_title().get_attribute("innerText") == "FOOTBALL"
 
+
 def test_first_rail_name(browser):
     sports_page = SportsPageObject(browser)
     assert sports_page.rail_names()[0].get_attribute("innerText") == "Competitions"
 
+
 def test_first_competition_name(browser):
     sports_page = SportsPageObject(browser)
     assert sports_page.competitions_tiles()[0].get_attribute("innerText") == "Copa Del Rey"
-
-def test_scroll_rail(browser):
-    pass
