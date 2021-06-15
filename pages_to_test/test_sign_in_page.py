@@ -39,7 +39,7 @@ def cookie_banner(browser):
 def test_sign_in_page_is_displayed(browser):
     sign_in_page = SignInPageObject(browser)
     sign_in_page.wait_for_the_page_to_be_open()
-    assert sign_in_page.sign_in_page_title().is_displayed()
+    assert sign_in_page.start_watching_button().is_displayed()
 
 
 def test_sign_in_page_cookie_banner_is_displayed(browser):

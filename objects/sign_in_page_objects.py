@@ -13,7 +13,7 @@ class SignInPageObject(object):
         self.driver.get(SIGN_IN_URL)
 
     def wait_for_the_page_to_be_open(self):
-        Lib.wait_for_element(self, locators.SIGN_IN_PAGE_TITLE, By.CSS_SELECTOR)
+        Lib.wait_for_element(self, locators.START_WATCHING_BUTTON, By.CSS_SELECTOR)
 
     def sign_in_page_title(self):
         return self.driver.find_element(By.CSS_SELECTOR, locators.SIGN_IN_PAGE_TITLE)
