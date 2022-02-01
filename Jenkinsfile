@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'echo $SHELL'
+                sh 'echo $PATH'
                 sh 'sw_vers'
                 sh 'whoami'
                 sh '/usr/local/bin/docker -v'
