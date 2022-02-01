@@ -2,8 +2,8 @@ pipeline {
     agent
     {
         docker {
-//             image 'qnib/pytest'
             label 'docker'
+            image 'qnib/pytest'
         }
     }
     stages {
