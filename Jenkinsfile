@@ -2,6 +2,7 @@ pipeline {
     agent {
         docker {
             image 'qnib/pytest'
+            args '--privileged'
         }
     }
     stages {
