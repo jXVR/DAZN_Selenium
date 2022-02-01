@@ -2,7 +2,7 @@ pipeline {
     agent
     {
         docker {
-            label 'docker'
+            args '-v $(which docker):/usr/bin/docker'
             image 'qnib/pytest'
         }
     }
