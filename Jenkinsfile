@@ -11,7 +11,7 @@ pipeline {
             steps {
                 sh 'sw_vers'
                 sh 'whoami'
-                sh 'docker -v'
+                sh '/usr/local/bin/docker -v'
             }
         }
     }
