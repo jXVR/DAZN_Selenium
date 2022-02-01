@@ -11,6 +11,7 @@ pipeline {
             steps {
                 sh 'sw_vers'
                 sh 'whoami'
+                sh 'docker -v'
             }
         }
     }
