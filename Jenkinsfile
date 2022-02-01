@@ -1,14 +1,15 @@
 pipeline {
-    agent {
-        docker {
-            image 'qnib/pytest'
-            args '--privileged'
-        }
-    }
+    agent any
+//    {
+//        docker {
+//            image 'qnib/pytest'
+  //          args '--privileged'
+   //     }
+    //}
     stages {
         stage('Build') {
             steps {
-                sh 'python -h'
+                sh 'sw_vers'
             }
         }
     }
