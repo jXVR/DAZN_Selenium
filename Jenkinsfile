@@ -1,11 +1,10 @@
 pipeline {
-     agent any
-//     {
-//         docker {
-//             args '--privileged'
-//             image 'qnib/pytest'
-//         }
-//     }
+     agent
+    {
+        docker {
+            image 'qnib/pytest'
+        }
+    }
     stages {
         stage('Build') {
             steps {
