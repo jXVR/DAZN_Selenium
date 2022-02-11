@@ -1,7 +1,7 @@
 pipeline {
      agent
     {
-        docker {
+        any {
             image 'qnib/pytest'
         }
     }
