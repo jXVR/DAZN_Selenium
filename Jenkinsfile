@@ -2,17 +2,15 @@ pipeline {
      agent
     {
         any {
-            image 'qnib/pytest'
+            image 'safesecurity/pytest'
         }
     }
     stages {
         stage('Build') {
             steps {
-                sh 'echo $PATH'
-//                 sh 'sw_vers'
-                sh 'whoami'
-                sh '/usr/local/bin/docker -v'
-                sh 'docker -v'
+                sh 'python3 --version'
+                sh 'pytest --version'
+
             }
         }
     }
