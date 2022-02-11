@@ -1,7 +1,7 @@
 pipeline {
      agent
     {
-        any {
+        docker {
             image 'safesecurity/pytest'
         }
     }
