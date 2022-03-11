@@ -4,6 +4,7 @@ pipeline {
         docker {
             //image 'safesecurity/pytest'
             image 'qnib/pytest'
+            securityContext 'runAsUser: 0'
         }
     }
     stages {
