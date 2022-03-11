@@ -4,13 +4,13 @@ pipeline {
         docker {
             //image 'safesecurity/pytest'
             image 'qnib/pytest'
-            securityContext 'runAsUser: 0'
         }
     }
     stages {
         stage('Build') {
             steps {
                 script {
+                sh 'pwd'
                 sh 'java --version'
                 sh 'python3 --version'
                 sh 'python --version'
