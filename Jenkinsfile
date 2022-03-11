@@ -2,7 +2,8 @@ pipeline {
      agent
     {
         docker {
-            image 'safesecurity/pytest'
+            //image 'safesecurity/pytest'
+            image 'qnib/pytest'
         }
     }
     stages {
