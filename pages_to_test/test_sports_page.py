@@ -1,8 +1,8 @@
 import pytest
-import Selenium.DAZN.assets.urls as urls
-from Selenium.DAZN.objects.sports_page_objects import SportsPageObject
-from Selenium.DAZN.objects.catalog_page_objects import CatalogPageObject
-from Selenium.DAZN.pages_to_test.test_sign_in_page import log_in
+import assets.urls as urls
+from objects.sports_page_objects import SportsPageObject
+from objects.catalog_page_objects import CatalogPageObject
+from pages_to_test.test_sign_in_page import log_in
 from selenium.webdriver import Chrome
 
 
