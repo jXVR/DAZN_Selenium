@@ -1,8 +1,6 @@
 pipeline {
-    agent
-    { dockerfile true }
-    environment {
-        DAZN_USER_DACH = credentials('DAZN_USER_DACH')
+    agent { 
+        dockerfile true 
     }
     stages {
         stage('Build') {
