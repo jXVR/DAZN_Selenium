@@ -27,7 +27,7 @@ fi
 jenkins_blueocean_port="$5"
 if [[ -z "$jenkins_blueocean_port" ]]
 then
-  jenkins_blueocean_port=8004
+  jenkins_blueocean_port=8084
 fi
 
 docker network create jenkins
